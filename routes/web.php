@@ -22,10 +22,10 @@ use App\Http\Controllers\Dashboard\ServiceController;
 |
 */
 
-Route::get('detail_booking/{id}', LandingController::class, 'detail_booking')->name('detail.booking.landing');
-Route::get('booking/{id}', LandingController::class, 'booking')->name('booking.landing');
-Route::get('detail/{id}', LandingController::class, 'detail')->name('detail.landing');
-Route::get('explore', LandingController::class, 'explore')->name('explore.landing');
+Route::get('detail_booking/{id}', [LandingController::class, 'detail_booking'])->name('detail.booking.landing');
+Route::get('booking/{id}', [LandingController::class, 'booking'])->name('booking.landing');
+Route::get('detail/{id}', [LandingController::class, 'detail'])->name('detail.landing');
+Route::get('explore', [LandingController::class, 'explore'])->name('explore.landing');
 Route::resource('/', LandingController::class);
 
 Route::group(['prefix' => 'member', 'as' => 'member.', 'middleware' => ['auth:sanctum', 'verified']], function () {
@@ -37,16 +37,16 @@ Route::group(['prefix' => 'member', 'as' => 'member.', 'middleware' => ['auth:sa
     Route::resource('service', ServiceController::class);
 
     // request
-    Route::get('approve_request/{id}', RequestController::class, 'approve')->name('approve.request');
+    Route::get('approve_request/{id}', [RequestController::class, 'approve'])->name('approve.request');
     Route::resource('request', RequestController::class);
 
     // my order
-    Route::get('accept/order/{id}', MyOrderController::class, 'accepted')->name('accept.order');
-    Route::get('reject/order/{id}', MyOrderController::class, 'rejected')->name('reject.order');
+    Route::get('accept/order/{id}', [MyOrderController::class, 'accepted'])->name('accept.order');
+    Route::get('reject/order/{id}', [MyOrderController::class, 'rejected'])->name('reject.order');
     Route::resource('order', MyOrderController::class);
 
     // profile
-    Route::get('delete_photo', ProfileController::class, 'delete')->name('delete.photo.order');
+    Route::get('delete_photo', [ProfileController::class, 'delete'])->name('delete.photo.order');
     Route::resource('profile', ProfileController::class);
 });
 
