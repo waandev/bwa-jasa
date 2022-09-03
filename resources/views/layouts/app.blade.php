@@ -1,46 +1,39 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html x-data="data()" lang="en">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    @include('includes.dashboard.meta')
+    <title>@yield('title') | SERV</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    @stack('before-style')
+    @include('includes.dashboard.style')
+    @method('after-style')
+</head>
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+<body class="antialiased">
+    <div class="flex h-screen bg-serv-services-bg" :class="{ 'overflow-hidden': isSideMenuOpen }">
 
-        @livewireStyles
+        @include('components.dashboard.desktop')
+        <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 flex items-end bg-black bg-opacity-50 z-1 sm:items-center sm:justify-center">
+        </div>
+        @include('components.dashboard.mobile')
 
-        <!-- Scripts -->
-        <script src="{{ mix('js/app.js') }}" defer></script>
-    </head>
-    <body class="font-sans antialiased">
-        <x-jet-banner />
+        <div class="flex flex-col flex-1 w-full">
+            @include('components.dashboard.header')
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+            {{-- @include('sweetalert::alert') --}}
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+            @yield('content')
         </div>
 
-        @stack('modals')
+        @stack('before-script')
+        @include('includes.dashboard.script')
+        @stack('after-script')
+    </div>
+</body>
 
-        @livewireScripts
-    </body>
 </html>
