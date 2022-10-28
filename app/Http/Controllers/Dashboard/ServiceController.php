@@ -56,6 +56,7 @@ class ServiceController extends Controller
     public function store(StoreServiceRequest $request)
     {
         $data = $request->all();
+
         $data['users_id'] = Auth::user()->id;
 
         // add to service
@@ -65,7 +66,7 @@ class ServiceController extends Controller
         foreach ($data['advantage-service'] as $key => $value) {
             $advantage_service = new AdvantageService;
             $advantage_service->service_id = $service->id;
-            $advantage_service->advantage_id = $value;
+            $advantage_service->advantage = $value;
             $advantage_service->save();
         }
 
@@ -73,13 +74,13 @@ class ServiceController extends Controller
         foreach ($data['advantage-user'] as $key => $value) {
             $advantage_user = new AdvantageUser();
             $advantage_user->service_id = $service->id;
-            $advantage_user->advantage_id = $value;
+            $advantage_user->advantage = $value;
             $advantage_user->save();
         }
 
         // add to thumbnail service
         if ($request->hasFile('thumbnail')) {
-            foreach ($request->file('thumbnai') as $file) {
+            foreach ($request->file('thumbnail') as $file) {
                 $path = $file->store(
                     'assets/service/thumbnail',
                     'public'
@@ -198,7 +199,7 @@ class ServiceController extends Controller
 
         // update thumbnail service
         if ($request->hasFile('thumbnails')) {
-            foreach ($request->file('thumbnails') as $key => $value) {
+            foreach ($request->file('thumbnails') as $key => $file) {
                 // get all photo thumbnail
                 $get_photo = ThumbnailService::where('id', $key)->first();
 
