@@ -24,7 +24,7 @@ class DetailUser extends Model
         'photo',
         'role',
         'contact_number',
-        'bioghrapy',
+        'biography',
         'updated_at',
         'created_at',
         'deleted_at',
