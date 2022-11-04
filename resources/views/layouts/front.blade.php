@@ -20,7 +20,7 @@
 
         @include('includes.landing.header')
 
-        {{-- @include('sweetalert::alert') --}}
+        @include('sweetalert::alert')
 
         @yield('content')
 
