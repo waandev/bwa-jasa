@@ -11,7 +11,7 @@
                         My Orders
                     </h2>
                     <p class="text-sm text-gray-400">
-                        3 Total Orders
+                        {{ auth()->user()->order_freelancer()->count() }} Total Orders
                     </p>
                 </div>
                 <div class="col-span-4 lg:text-right">
