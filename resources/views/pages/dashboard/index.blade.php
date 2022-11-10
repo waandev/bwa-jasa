@@ -107,8 +107,8 @@
                                             <div class="flex items-center text-sm">
                                                 <div class="relative w-10 h-10 mr-3 rounded-full md:block">
 
-                                                    @if (auth()->user()->detail_user()->first()->photo != null)
-                                                        <img src="{{ url(Storage::url(auth()->user()->detail_user()->first()->photo)) }}"
+                                                    @if ($item->user_buyer->detail_user->photo != null)
+                                                        <img src="{{ url(Storage::url($item->user_buyer->detail_user->photo)) }}"
                                                             alt="photo profile" loading="lazy"
                                                             class="object-cover w-full h-full rounded-full">
                                                     @else
@@ -124,24 +124,73 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p class="font-medium text-black">{{ $order->user_buyer->name ?? '' }}
+                                                    <p class="font-medium text-black">{{ $item->user_buyer->name ?? '' }}
                                                     </p>
 
-                                                    @if ($order->order_status_id == '1')
+                                                    @if ($item->order_status_id == '1')
                                                         <p class="text-sm text-green-500">
-                                                            {{ $order->order_status->name ?? '' }}</p>
-                                                    @elseif ($order->order_status_id == '2')
+                                                            {{ $item->order_status->name ?? '' }}</p>
+                                                    @elseif ($item->order_status_id == '2')
                                                         <p class="text-sm text-yellow-500">
-                                                            {{ $order->order_status->name ?? '' }}</p>
-                                                    @elseif ($order->order_status_id == '3')
+                                                            {{ $item->order_status->name ?? '' }}</p>
+                                                    @elseif ($item->order_status_id == '3')
                                                         <p class="text-sm text-red-500">
-                                                            {{ $order->order_status->name ?? '' }}</p>
+                                                            {{ $item->order_status->name ?? '' }}</p>
                                                     @else
                                                         <p class="text-sm text-black-500">
-                                                            {{ $order->order_status->name ?? '' }}</p>
+                                                            {{ $item->order_status->name ?? '' }}</p>
                                                     @endif
                                                 </div>
                                             </div>
+                                        </td>
+
+                                        <td class="w-2/4 px-1 py-5">
+                                            <div class="flex items-center text-sm">
+                                                <div class="relative w-10 h-10 mr-3 rounded-full md:block">
+
+                                                    {{-- validation photo --}}
+                                                    @if (count($item->service->thumbnail_service))
+                                                        @if ($item->service->thumbnail_service[0]->thumbnail != null)
+                                                            <img class="object-cover w-full h-full rounded"
+                                                                src="{{ url(Storage::url($item->service->thumbnail_service[0]->thumbnail)) }}"
+                                                                alt="" loading="lazy" />
+                                                        @else
+                                                            <svg class="object-cover w-full h-full rounded text-gray-300"
+                                                                fill="currentColor" viewBox="0 0 24 24">
+                                                                <path
+                                                                    d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                            </svg>
+                                                        @endif
+                                                    @else
+                                                        <svg class="object-cover w-full h-full rounded text-gray-300"
+                                                            fill="currentColor" viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                        </svg>
+                                                    @endif
+
+                                                    <div class="absolute inset-0 rounded-full shadow-inner"
+                                                        aria-hidden="true"></div>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-black">
+                                                        {{ $item->service->title ?? '' }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-1 py-5 text-xs text-red-500">
+                                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="inline mb-1">
+                                                <path
+                                                    d="M7.0002 12.8332C10.2219 12.8332 12.8335 10.2215 12.8335 6.99984C12.8335 3.77818 10.2219 1.1665 7.0002 1.1665C3.77854 1.1665 1.16687 3.77818 1.16687 6.99984C1.16687 10.2215 3.77854 12.8332 7.0002 12.8332Z"
+                                                    stroke="#F26E6E" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M7 3.5V7L9.33333 8.16667" stroke="#F26E6E"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+
+                                            {{ date('d/m/Y', strtotime($item->expired)) ?? '' }}
                                         </td>
                                     </tr>
                                 @empty
@@ -169,7 +218,8 @@
                                         Rp 21.000.000
                                     </p>
                                 </div>
-                                <img class="w-16 h-12" src="{{ asset('/assets/images/visa-icon.svg') }}" alt="" />
+                                <img class="w-16 h-12" src="{{ asset('/assets/images/visa-icon.svg') }}"
+                                    alt="" />
                             </div>
                             <div class="pt-6">
                                 <p class="font-medium tracking-more-wider">
