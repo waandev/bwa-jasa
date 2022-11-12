@@ -1,19 +1,31 @@
 <!-- Desktop sidebar -->
 <aside class="z-20 flex-shrink-0 hidden w-64 overflow-y-auto bg-white md:block" aria-label="aside">
     <div class="text-serv-bg">
+
         <div class="" href="#">
             <img src="{{ asset('/assets/images/logo.svg') }}" alt="" class="object-center mx-auto my-8 ">
         </div>
 
         <div class="flex items-center pt-8 pl-5 space-x-2 border-t border-gray-100">
-            <!--Author's profile photo-->
-            <img class="object-cover object-center mr-1 rounded-full w-14 h-14"
-                src="{{ url('https://randomuser.me/api/portraits/men/1.jpg') }}" alt="random user" />
+
+            {{-- validation photo --}}
+            @if (auth()->user()->detail_user()->first()->photo != null)
+                <img class="object-cover object-center mr-1 rounded-full w-14 h-14"
+                    src="{{ url(Storage::url(auth()->user()->detail_user()->first()->photo)) }}" alt=""
+                    loading="lazy" />
+            @else
+                <svg class="object-cover object-center mr-1 rounded-full w-14 h-14 text-gray-300" fill="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                        d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            @endif
+
             <div>
                 <!--Author name-->
-                <p class="font-semibold text-gray-900 text-md">{{ Auth::user()->name }}</p>
+                <p class="font-semibold text-gray-900 text-md">{{ Auth::user()->name ?? '' }}</p>
                 <p class="text-sm font-light text-serv-text">
-                    Website Developer
+                    {{ auth()->user()->detail_user()->first()->role ?? '' }}
                 </p>
             </div>
         </div>
@@ -28,7 +40,6 @@
                     <span class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg bg-serv-bg"
                         aria-hidden="true"></span>
                 @endif
-
 
                 <a class="inline-flex items-center w-full text-sm font-medium text-gray-800 transition-colors duration-150 hover:text-gray-800 "
                     href="{{ route('member.dashboard.index') }}">
@@ -76,7 +87,9 @@
                     </svg> -->
                     <span class="ml-4">My Services</span>
                     <span
-                        class="inline-flex items-center justify-center px-3 py-2 ml-auto text-xs font-bold leading-none text-green-500 rounded-full bg-serv-green-badge">2</span>
+                        class="inline-flex items-center justify-center px-3 py-2 ml-auto text-xs font-bold leading-none text-green-500 rounded-full bg-serv-green-badge">
+                        {{ auth()->user()->service()->count() }}
+                    </span>
 
                 </a>
             </li>
@@ -110,7 +123,9 @@
                     </svg> -->
                     <span class="ml-4">My Request</span>
                     <span
-                        class="inline-flex items-center justify-center px-3 py-2 ml-auto text-xs font-bold leading-none text-green-500 rounded-full bg-serv-green-badge">3</span>
+                        class="inline-flex items-center justify-center px-3 py-2 ml-auto text-xs font-bold leading-none text-green-500 rounded-full bg-serv-green-badge">
+                        {{ auth()->user()->order_buyer()->count() }}
+                    </span>
 
                 </a>
             </li>
@@ -147,12 +162,15 @@
                     </svg> -->
                     <span class="ml-4">My Orders</span>
                     <span
-                        class="inline-flex items-center justify-center px-3 py-2 ml-auto text-xs font-bold leading-none text-green-500 rounded-full bg-serv-green-badge">10</span>
+                        class="inline-flex items-center justify-center px-3 py-2 ml-auto text-xs font-bold leading-none text-green-500 rounded-full bg-serv-green-badge">
+                        {{ auth()->user()->order_freelancer()->count() }}
+                    </span>
 
                 </a>
             </li>
 
             <li class="relative px-6 py-3">
+
                 @if (request()->is('member/profile') ||
                     request()->is('member/profile/*') ||
                     request()->is('member/*/profile') ||
@@ -160,6 +178,7 @@
                     <span class="absolute inset-y-0 left-0 w-1 rounded-tr-lg rounded-br-lg bg-serv-bg"
                         aria-hidden="true"></span>
                 @endif
+
                 <a class="inline-flex items-center w-full text-sm font-light transition-colors duration-150 hover:text-gray-800"
                     href="{{ route('member.profile.index') }}">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -198,11 +217,14 @@
 
                     <span class="ml-4">Logout</span>
 
-                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display: none">
+                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display: none;">
                         @csrf
                     </form>
+
                 </a>
             </li>
+
         </ul>
+
     </div>
 </aside>

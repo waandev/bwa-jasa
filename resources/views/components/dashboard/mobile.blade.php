@@ -4,7 +4,9 @@
     x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
     x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
     @keydown.escape="closeSideMenu" aria-label="aside">
+
     <div class="py-4 text-gray-500 dark:text-gray-400">
+
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
             <img src="{{ asset('/assets/images/logo.svg') }}" alt="" class="ml-6">
         </a>
@@ -47,6 +49,7 @@
         </ul>
 
         <ul>
+
             <li class="relative px-6 py-3">
 
                 @if (request()->is('member/service') ||
@@ -203,12 +206,13 @@
 
                     <span class="ml-4">Log out</span>
 
-                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display: none">
+                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display: none;">
                         @csrf
                     </form>
                 </a>
             </li>
 
         </ul>
+
     </div>
 </aside>
